@@ -172,8 +172,8 @@ def edit_bom(prod_name):
       if comp_name in BOM[prod_name]:
         BOM[prod_name].pop(comp_name)
         print(f"[-] Deleted component '{comp_name}'.")
-    else:
-      print(f"[X] Component '{comp_name}' not found.")
+      else:
+        print(f"[X] Component '{comp_name}' not found.")
   else:
     print("[!] Invalid action. Choose a/u/d or 'exit'.")
   print(f"\n[✓] Final BOM for '{prod_name}':")
@@ -251,3 +251,21 @@ def produce_semi_finished(prod_name, quantity_to_produce):
   add_raw(prod_name, category, price, quantity_to_produce, sku)
   add_semi(prod_name, category, price, quantity_to_produce, sku)
   print(f"[✓] Produced {quantity_to_produce} unit(s) of semi-finished product '{prod_name}'.")
+
+
+add_raw("Wood", "Raw Material", 100, 500, "W001")
+add_raw("Glue", "Raw Material", 50, 100, "G001")
+view_raw()
+
+add_bom("Chair", {"Wood": 10, "Glue": 2})
+view_raw()
+produce_semi_finished("Chair", 4)
+
+add_bom("Table", {"Wood": 20, "Glue": 4})
+produce_semi_finished("Table",1)
+view_raw()
+
+add_bom("Set" , {"Chair": 4, "Table": 1})
+produce_product("Set", 1)
+
+view_raw()

@@ -1,7 +1,11 @@
-run = "python main.py"
+run = "python app.py"
 modules = ["python-3.11"]
 [nix]
 channel = "stable-24_05"
 
 [deployment]
 run = ["sh", "-c", "python main.py"]
+
+[[ports]]
+localPort = 5000
+externalPort = 80

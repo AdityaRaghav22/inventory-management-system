@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inventory Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">MedIt</div>
+      <ul>
+        <li class="active">Dashboard</li>
+        <li>Inventory</li>
+        <li>Pending Orders</li>
+        <li>Notifications</li>
+        <li>Chat</li>
+        <li>Settings</li>
+        <li>Help</li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header>
+        <input type="text" placeholder="Search anything..." class="search-bar">
+        <div class="user-info">Good Morning, Subash</div>
+      </header>
+
+      <h2>Dashboard</h2>
+      <p>A quick data overview of the inventory.</p>
+
+      <!-- Summary Cards -->
+      <div class="summary-cards">
+        <div class="card green">
+          <p>Good</p>
+          <span>Inventory Status</span>
+        </div>
+        <div class="card yellow">
+          <p>Rs. 8,55,875</p>
+          <span>Revenue - Aug 2024</span>
+        </div>
+        <div class="card blue">
+          <p>298</p>
+          <span>Medicines Available</span>
+        </div>
+        <div class="card red">
+          <p>01</p>
+          <span>Medicine Shortage</span>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</body>
+</html>
