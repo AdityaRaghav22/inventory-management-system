@@ -1,7 +1,29 @@
+import random as r
+
 inventory_raw = {}
 raw_id_counter = 1
 semi_finished = {}
 semi_finish_id = 1
+finished_products = {}
+finished_id = 1
+order_id = 1
+def get_all_skus():
+  skus = set()
+  for item in inventory_raw.values():
+    skus.add(item['sku'])
+  for item in semi_finished.values():
+    skus.add(item['sku'])
+  return skus
+def add_sku(product_name, category):
+  prefix = category[:3].upper()
+  base = product_name[:3].upper()
+  existing_skus = get_all_skus()
+
+  for _ in range(100):
+      sku = f"{prefix}-{base}{r.randint(100, 999)}"
+      if sku not in existing_skus:
+          return sku
+  raise Exception("[X] Failed to generate unique SKU after 100 attempts.") 
 def view_raw():
     if not inventory_raw:
         print("[!] No Raw Material available.")
@@ -16,7 +38,7 @@ def add_raw (name, category, price, quantity, sku):
       'category' : category,
       'price' : round(float(price), 2),
       'quantity' : round(float(quantity), 2),
-      'sku' : sku
+      'sku' : add_sku(name, category)
   }
   raw_id_counter += 1
   print(f"[+]Raw Material Added: {name}")
@@ -80,16 +102,6 @@ def input_validation_raw():
     print(f"[✓] Valid Category: {category}")
     break
   while True:
-    sku = input("Enter SKU: ").strip().title()
-    if not sku:
-      print("[X] Name cannot be empty.")
-      continue
-    elif not sku.isalnum():
-      print("[X] SKU must contain only letters.")
-      continue
-    print(f"[✓] Valid SKU: {sku}")
-    break
-  while True:
     try:
       quantity = int(input("Enter Quantity: "))
       if quantity <= 0:
@@ -110,7 +122,8 @@ def input_validation_raw():
       break
     except ValueError:
       print("Price must be a valid number")
-  add_raw(name,category,price*quantity,quantity,sku)
+  sku =add_sku(name,category)
+  add_raw(name,category,price*quantity,quantity,sku )
   view_raw()
 BOM = {}
 def add_bom(prod_name, components):
@@ -201,33 +214,49 @@ def check_bom_completeness(prod_name):
     else:
         print(f"[X] BOM for '{prod_name}' is incomplete or missing components.")
     return complete
-def add_semi (name, category, price, quantity, sku):
+def add_semi (name,category,price, quantity, sku):
   global semi_finish_id
   semi_finished[name] = {
-      'id' : semi_finish_id,
+    'id' : semi_finish_id,
+    'category': category,
+    'price' : round(float(price),2),
+    'quantity' : round(float(quantity),2),
+    'sku' : add_sku(name,category)
+  }
+  semi_finish_id += 1
+  print(f"[✓] Semi-Finished Product '{name}' Added/Updated Successfully.")
+def add_finished (name, category, price, quantity, sku):
+  global finished_id
+  finished_products[name] = {
+      'id' : finished_id,
+      'category' : category,
       'price' : round(float(price),2),
       'quantity' : round(float(quantity),2),
       'sku' : sku
   }
-  semi_finish_id += 1
-  print(f"[+]Raw Material Added: {name}")
+  finished_id += 1
+  print(f"[+]Finished Product Added: {name}")
 def produce_product(prod_name, quantity):
-    prod_name = prod_name.title()
-    if prod_name not in BOM:
-        print(f"[X] BOM for '{prod_name}' not found.")
-        return
-    for component, qty_needed in BOM[prod_name].items():
-        total_needed = qty_needed * quantity
-        if component not in inventory_raw:
-            print(f"[X] Component '{component}' missing from inventory.")
-            return
-        elif inventory_raw[component]["quantity"] < total_needed:
-            print(f"[X] Not enough '{component}'. Needed: {total_needed}, Available: {inventory_raw[component]['quantity']}")
-            return
-    for component, qty_needed in BOM[prod_name].items():
-        inventory_raw[component]["quantity"] -= qty_needed * quantity
-        print(f"[~] Used {qty_needed * quantity} of '{component}'.")
-    print(f"[✓] Produced {quantity} unit(s) of '{prod_name}'.")
+  prod_name = prod_name.title()
+  if prod_name not in BOM:
+      print(f"[X] BOM for '{prod_name}' not found.")
+      return
+  for component, qty_needed in BOM[prod_name].items():
+      total_needed = qty_needed * quantity
+      if component not in inventory_raw:
+          print(f"[X] Component '{component}' missing from inventory.")
+          return
+      elif inventory_raw[component]["quantity"] < total_needed:
+          print(f"[X] Not enough '{component}'. Needed: {total_needed}, Available: {inventory_raw[component]['quantity']}")
+          return
+  for component, qty_needed in BOM[prod_name].items():
+      inventory_raw[component]["quantity"] -= qty_needed * quantity
+      print(f"[~] Used {qty_needed * quantity} of '{component}'.")
+  print(f"[✓] Produced {quantity} unit(s) of '{prod_name}'.")
+  price = float(input(f"Enter a price for {prod_name}:"))*quantity
+  category = "Finished Product"
+  sku = add_sku(prod_name,category)
+  add_finished(prod_name, category, price, quantity, sku)
 def produce_semi_finished(prod_name, quantity_to_produce):
   prod_name = prod_name.title()
   if prod_name not in BOM:
@@ -246,12 +275,11 @@ def produce_semi_finished(prod_name, quantity_to_produce):
       inventory_raw[component]['quantity'] -= total_required
       print(f"[-] Used {total_required} of '{component}'.")
   price = float(input(f"Enter a price for {prod_name}:"))*quantity_to_produce
-  sku = input(f"Enter SKU for the produced semi-finished '{prod_name}': ").strip().upper()
   category = "Semi-Finished"
+  sku = add_sku(prod_name,category)
   add_raw(prod_name, category, price, quantity_to_produce, sku)
   add_semi(prod_name, category, price, quantity_to_produce, sku)
   print(f"[✓] Produced {quantity_to_produce} unit(s) of semi-finished product '{prod_name}'.")
-
 
 add_raw("Wood", "Raw Material", 100, 500, "W001")
 add_raw("Glue", "Raw Material", 50, 100, "G001")
@@ -268,4 +296,8 @@ view_raw()
 add_bom("Set" , {"Chair": 4, "Table": 1})
 produce_product("Set", 1)
 
-view_raw()
+# view_raw()
+
+def add_order()
+
+
