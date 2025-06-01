@@ -16,7 +16,7 @@ def sales_orders():
 
 @app.route('/notifications')
 def notifications():
-    return render_template('notifiaction.html', active_page= 'notifications')
+    return render_template('notifications.html', active_page= 'notifications')
 
 @app.route('/chat')
 def chat():

@@ -18,15 +18,15 @@
         <li class="{% if active_page == 'inventory' %}active{% endif %}">
           <a href="{{url_for('inventory')}}">Inventory</a></li>
         <li class="{% if active_page == 'orders' %}active{% endif %}">
-          <a href="{{url_for('inventory')}}">Pending Order</a></li>
-        <li class="{% if active_page == 'notification' %}active{% endif %}">
-          <a href="{{url_for('inventory')}}">Notification</a></li>
+          <a href="{{url_for('sales_orders')}}">Pending Order</a></li>
+        <li class="{% if active_page == 'notifications' %}active{% endif %}">
+          <a href="{{url_for('notifications')}}">Notification</a></li>
         <li class="{% if active_page == 'chat' %}active{% endif %}">
-          <a href="{{url_for('inventory')}}">Chat</a></li>
+          <a href="{{url_for('chat')}}">Chat</a></li>
         <li class="{% if active_page == 'settings' %}active{% endif %}">
-          <a href="#">Settings</a></li>
+          <a href="{{url_for('settings')}}">Settings</a></li>
         <li class="{% if active_page == 'help' %}active{% endif %}">
-          <a href="#">Help</a></li>
+          <a href="{{url_for('help')}}">Help</a></li>
       </ul>
     </aside>
 
