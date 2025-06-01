@@ -107,3 +107,17 @@ header {
 .card.yellow { border-top: 5px solid #f1c40f; }
 .card.blue { border-top: 5px solid #3498db; }
 .card.red { border-top: 5px solid #e74c3c; }
+
+#live-clock {
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  background-color: #126d62;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  padding: 8px 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  font-weight: 600;
+  z-index: 1000;
+}
