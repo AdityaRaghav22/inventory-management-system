@@ -1,0 +1,28 @@
+{% extends "home.html" %}
+
+
+{% block content %}
+
+  <h2>Dashboard</h2>
+  <p>A quick data overview of the inventory.</p>
+
+  <div class="summary-cards">
+    <div class="card green">
+      <p>Good</p>
+      <span>Inventory Status</span>
+    </div>
+    <div class="card yellow">
+      <p>Rs. 8,55,875</p>
+      <span>Revenue - Aug 2024</span>
+    </div>
+    <div class="card blue">
+      <p>298</p>
+      <span>Product Available</span>
+    </div>
+    <div class="card red">
+      <p>01</p>
+      <span>Product Shortage</span>
+    </div>
+  </div>
+
+{% endblock %}
