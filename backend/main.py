@@ -28,11 +28,10 @@ def add_sku(product_name, category):
   prefix = category[:3].upper()
   base = product_name[:3].upper()
   existing_skus = get_all_skus()
-
   for _ in range(100):
-      sku = f"{prefix}-{base}{r.randint(100, 999)}"
-      if sku not in existing_skus:
-          return sku
+    sku = f"{prefix}-{base}{r.randint(100, 999)}"
+    if sku not in existing_skus:
+      return sku
   raise Exception("[X] Failed to generate unique SKU after 100 attempts.") 
 def view_raw():
     if not inventory_raw:
@@ -360,23 +359,4 @@ def update_sales_order_status(order_id, new_status):
     return
   sales_order[order_id]['status'] = new_status
   print(f"[✓] Order ID '{order_id}' status updated to '{new_status}'.")
-add_raw("Wood", "Raw Material", 100, 500, "W001")
-add_raw("Glue", "Raw Material", 50, 100, "G001")
-view_raw()
-
-add_bom("Chair", {"Wood": 10, "Glue": 2})
-view_raw()
-produce_semi_finished("Chair", 4)
-
-add_bom("Table", {"Wood": 20, "Glue": 4})
-produce_semi_finished("Table",1)
-view_raw()
-
-add_bom("Set" , {"Chair": 4, "Table": 1})
-produce_product("Set", 1)
-
-add_sales_order("John Doe", {"Set": 1}, order_date=None, notes="Delivery on 2023-10-15")
-view_sales_orders()
-
-
 
