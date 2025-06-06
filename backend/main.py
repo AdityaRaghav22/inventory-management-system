@@ -334,7 +334,6 @@ def add_sales_order(customer_name, items_dict, order_date=None, notes=""):
     "total_price": total_price,
     "notes": notes
   }
-
   print(f"[✓] Sales order {order_id} added successfully for '{customer_name}'. Total: ₹{total_price:.2f}")
 def view_sales_orders():
   if not sales_order:

@@ -1,5 +1,5 @@
 import random as r
-from utils import add_sku
+from backend.utils import add_sku
 
 inventory_raw = {}
 raw_id_counter = 1
@@ -14,13 +14,10 @@ def view_raw():
 
 def add_raw(name, category, price, quantity, semi_finished):
   global raw_id_counter
-
   if name in inventory_raw:
     print(f"[!] Raw Material '{name}' already exists.")
     return
-
   sku = add_sku(name, category, inventory_raw, semi_finished)
-
   inventory_raw[name] = {
     'id': raw_id_counter,
     'category': category,
@@ -53,7 +50,6 @@ def edit_raw(raw_id, name=None, category=None, price=None, quantity=None, sku=No
       if name is not None and name != raw_name:
           inventory_raw[name] = inventory_raw.pop(raw_name)
           details = inventory_raw[name]
-
       if sku is not None:
           details['sku'] = sku
       if category is not None:
@@ -86,8 +82,3 @@ def search_raw(raw_name=None, raw_SKU=None):
     return
 
   print("Please provide either raw_name or raw_SKU to search.")
-
-add_raw("Cotton", "Fabric", 100, 50, {})
-add_raw("Polyester", "Fabric", 150, 30, {})
-view_raw()
-search_raw(raw_name="Cotton")

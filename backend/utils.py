@@ -1,6 +1,6 @@
 import random as r
 from datetime import datetime
-
+from backend.sales_orders import sales_order
 def get_valid_date():
   while True:
     date_str = input("Enter Date (DD-MM-YYYY): ")
@@ -25,3 +25,10 @@ def add_sku(product_name, category, inventory_raw, semi_finished):
     if sku not in existing_skus:
       return sku
   raise Exception("[X] Failed to generate unique SKU after 100 attempts.") 
+def generate_order_id():
+  if not sales_order:
+    return "ORD001"
+  last_id = sorted(sales_order.keys())[-1]
+  number = int(last_id.replace("ORD",""))
+  new_number = number + 1
+  return f"ORD{new_number:03d}"

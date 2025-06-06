@@ -1,5 +1,5 @@
 from raw_materials import inventory_raw
-
+from backend.utils import add_sku
 
 BOM = {}
 
@@ -110,5 +110,3 @@ def check_bom_completeness(prod_name):
   else:
     print(f"[X] BOM for '{prod_name}' is incomplete or missing components.")
   return complete
-
-add_bom("T-Shirt", {"Cotton": 2, "Polyester": 1})
