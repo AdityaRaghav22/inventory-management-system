@@ -1,6 +1,5 @@
 import random as r
 from datetime import datetime
-from backend.sales_orders import sales_order
 def get_valid_date():
   while True:
     date_str = input("Enter Date (DD-MM-YYYY): ")
@@ -9,13 +8,17 @@ def get_valid_date():
       return str(sales_order_date)
     except ValueError:
       print("[X] Invalid date format. Please use DD-MM-YYYY.")
-def get_all_skus(inventory_raw, semi_finished):
+      
+def get_all_skus(inventory_raw= None, semi_finished=None):
   skus = set()
-  for item in inventory_raw.values():
-    skus.add(item['sku'])
-  for item in semi_finished.values():
-    skus.add(item['sku'])
+  if inventory_raw is not None:
+    for prod,details in inventory_raw.items():
+      skus.add(details['sku'])
+  if semi_finished is not None:
+    for prod,details in semi_finished.items():
+      skus.add(details['sku'])
   return skus
+    
 def add_sku(product_name, category, inventory_raw, semi_finished):
   prefix = category[:3].upper()
   base = product_name[:3].upper()
@@ -25,7 +28,9 @@ def add_sku(product_name, category, inventory_raw, semi_finished):
     if sku not in existing_skus:
       return sku
   raise Exception("[X] Failed to generate unique SKU after 100 attempts.") 
+  
 def generate_order_id():
+  from backend.sales_orders import sales_order  
   if not sales_order:
     return "ORD001"
   last_id = sorted(sales_order.keys())[-1]

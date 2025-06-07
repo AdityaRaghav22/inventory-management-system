@@ -1,11 +1,12 @@
-from backend.utils import add_sku
-from bom import BOM
-from raw_materials import inventory_raw
-from semi_finished import semi_finished
+
+from backend.bom import BOM
+from backend.raw_materials import inventory_raw
+from backend.semi_finished import semi_finished
 finished_products = {}
 finished_id = 1
 
 def add_finished (name, category, price, quantity, sku):
+  from backend.utils import add_sku
   global finished_id
   if name in finished_products:
     print(f"[!] Finished Product '{name}' already exists.")
@@ -89,3 +90,5 @@ def get_finished_by_sku(sku):
     if details['sku'] == sku:
       return name, details
   return None
+
+produce_product("Steel Pipe",2)

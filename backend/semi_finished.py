@@ -1,7 +1,7 @@
 from os import name
-from raw_materials import inventory_raw, add_raw
+from backend.raw_materials import inventory_raw, add_raw
 from backend.utils import add_sku
-from bom import BOM
+from backend.bom import BOM
 semi_finished = {}
 semi_finish_id = 1
 
@@ -97,3 +97,7 @@ def edit_semi(semi_id,prod_name=None, category=None, price=None, quantity=None, 
       view_semi(new_name if prod_name is not None else old_name)
       return
   print(f"[X] Semi Finished With ID {semi_id} Not Found.")
+
+add_semi("Gear", "Semi-Finished", 50, 100)
+
+produce_semi_finished("Steel Pipe", 1)

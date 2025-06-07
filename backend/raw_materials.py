@@ -82,3 +82,6 @@ def search_raw(raw_name=None, raw_SKU=None):
     return
 
   print("Please provide either raw_name or raw_SKU to search.")
+
+add_raw("Steel", "Raw Material", 100, 500, None)
+add_raw("Copper", "Raw Material", 150, 300, None)
