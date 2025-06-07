@@ -20,6 +20,12 @@ def home():
                          order_count=order_count,
                          active_page='home')
 
+def inventory():
+  from backend.raw_materials import inventory_raw
+  from backend.semi_finished import semi_finished
+  from backend.finished import finished_products
+  return render_template('products.html', inventory_raw=inventory_raw, semi_finished=semi_finished, finished_products=finished_products, active_page='inventory')
+
 if __name__ == '__main__':
   app.run(host = "0.0.0.0", debug=True)
    
