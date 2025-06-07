@@ -1,10 +1,11 @@
-{%extennds home.html %} 
+{% extends "home.html"%} 
 {% block title %}Inventory{% endblock %}
 
-{%block content %}
-<h2 class="mb-4">📊 Inventory</h2>
+{% block content %}
+<h2 class="mb-4">📊 Inventory & Order Summary</h2>
+
 <div class="row g-4 mb-4">
-  <div class="col-md-4">
+  <div class="col-md-3">
     <div class="card text-white bg-primary shadow-sm">
       <div class="card-body">
         <h5 class="card-title">Raw Materials</h5>
@@ -13,7 +14,7 @@
     </div>
   </div>
 
-  <div class="col-md-4">
+  <div class="col-md-3">
     <div class="card text-white bg-info shadow-sm">
       <div class="card-body">
         <h5 class="card-title">Semi-Finished</h5>
@@ -22,7 +23,7 @@
     </div>
   </div>
 
-  <div class="col-md-4">
+  <div class="col-md-3">
     <div class="card text-white bg-success shadow-sm">
       <div class="card-body">
         <h5 class="card-title">Finished Products</h5>
@@ -40,22 +41,5 @@
     </div>
   </div>
 </div>
-<div class="table-responsive">
-  <table class="table table-bordered table-hover bg-white">
-    <thead class="table-light">
-      <tr>
-        <th>Raw Material Details</th>
-        <th>Semi-Finished Details</th>
-        <th>Finished Details</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for order_id, details in order_count %}
-      <tr>
-        <td>{{ order_id }}</td>
-        <td>{{ details }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+
+{% endblock %}
