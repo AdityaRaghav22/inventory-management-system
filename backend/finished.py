@@ -90,3 +90,5 @@ def get_finished_by_sku(sku):
     if details['sku'] == sku:
       return name, details
   return None
+
+produce_product("Product A", 10)

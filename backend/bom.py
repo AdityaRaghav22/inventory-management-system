@@ -112,3 +112,4 @@ def check_bom_completeness(prod_name):
   return complete
 
 
+add_bom("Product A", {"Wood": 10, "iron": 5})
