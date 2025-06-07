@@ -111,5 +111,3 @@ def check_bom_completeness(prod_name):
     print(f"[X] BOM for '{prod_name}' is incomplete or missing components.")
   return complete
 
-
-add_bom("Product A", {"Wood": 10, "iron": 5})

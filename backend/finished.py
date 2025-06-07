@@ -91,5 +91,3 @@ def get_finished_by_sku(sku):
       return name, details
   return None
 
-produce_product("Product A", 1)
-view_finished_product()

@@ -82,6 +82,3 @@ def search_raw(raw_name=None, raw_SKU=None):
     return
 
   print("Please provide either raw_name or raw_SKU to search.")
-
-add_raw("Wood", "Wood", 100, 100, None)
-add_raw("Iron", "Metal", 200, 200, None)
