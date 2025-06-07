@@ -98,6 +98,3 @@ def edit_semi(semi_id,prod_name=None, category=None, price=None, quantity=None, 
       return
   print(f"[X] Semi Finished With ID {semi_id} Not Found.")
 
-add_semi("Gear", "Semi-Finished", 50, 100)
-
-produce_semi_finished("Steel Pipe", 1)

@@ -112,4 +112,3 @@ def check_bom_completeness(prod_name):
   return complete
 
 
-add_bom("Steel Pipe", {"Steel": 50, "Copper": 10})
