@@ -37,3 +37,5 @@ def generate_order_id():
   number = int(last_id.replace("ORD",""))
   new_number = number + 1
   return f"ORD{new_number:03d}"
+
+

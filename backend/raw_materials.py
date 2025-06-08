@@ -12,8 +12,27 @@ def view_raw():
     print(f"ID: {details['id']}, Name: {name}, Category: {details['category']}, "
           f"Price: ${details['price']: .2f}, Quantity: {details['quantity']}, SKU: {details['sku']}")
 
-def add_raw(name, category, price, quantity, semi_finished):
+def add_raw(name, category, price, quantity,semi_finished):
   global raw_id_counter
+  while True:
+    if not name:
+      print("[X] Name cannot be empty.")
+      continue
+    elif not name.isalpha():
+      print("[X] Name must contain only letters.")
+      continue
+    print(f"[✓] Valid name: {name}")
+    break
+  while True:
+    if not category:
+      print("[X] Category cannot be empty.")
+      continue
+    elif not category.isalpha():
+      print("[X] Name must contain only letters.")
+      continue
+    print(f"[✓] Valid Category: {category}")
+    break
+  
   if name in inventory_raw:
     print(f"[!] Raw Material '{name}' already exists.")
     return
@@ -82,3 +101,6 @@ def search_raw(raw_name=None, raw_SKU=None):
     return
 
   print("Please provide either raw_name or raw_SKU to search.")
+
+
+ 

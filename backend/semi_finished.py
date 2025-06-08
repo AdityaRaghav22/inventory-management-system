@@ -5,15 +5,32 @@ from backend.bom import BOM
 semi_finished = {}
 semi_finish_id = 1
 
-def add_semi (name,category,price, quantity, sku = None):
+def add_semi (semi_name ,category,price, quantity):
   global semi_finish_id
-  name = name.title() 
+  while True:
+    if not semi_name:
+      print("[X] Name cannot be empty.")
+      continue
+    elif not semi_name.isalpha():
+      print("[X] Name must contain only letters.")
+      continue
+    print(f"[✓] Valid name: {semi_name}")
+    break
+  while True:
+    if not category:
+      print("[X] Category cannot be empty.")
+      continue
+    elif not category.isalpha():
+      print("[X] Name must contain only letters.")
+      continue
+    print(f"[✓] Valid Category: {category}")
+    break
+
+  sku = add_sku(semi_name, category, inventory_raw, semi_finished)
   if name in semi_finished:
     print(f"[!] Semi-Finished Product '{name}' already exists.")
     return
-  if sku is None:
-   sku = add_sku(name, category, inventory_raw,semi_finished)
-  semi_finished[name] = {
+  semi_finished[semi_name] = {
     'id' : semi_finish_id,
     'category': category,
     'price' : round(float(price),2),
@@ -47,8 +64,8 @@ def produce_semi_finished(prod_name, quantity_to_produce):
     return
   price = unit_price * quantity_to_produce
   category = "Semi-Finished"
-  sku = add_sku(prod_name, category, inventory_raw, semi_finished)
-  add_raw(prod_name, category, price, quantity_to_produce,sku)
+  
+  add_raw(prod_name, category, price, quantity_to_produce,semi_finished)
   add_semi(prod_name, category, price, quantity_to_produce)
   print(f"[✓] Produced {quantity_to_produce} unit(s) of semi-finished product '{prod_name}'.")
 

@@ -5,14 +5,31 @@ from backend.semi_finished import semi_finished
 finished_products = {}
 finished_id = 1
 
-def add_finished (name, category, price, quantity, sku):
+def add_finished (name, category, price, quantity):
   from backend.utils import add_sku
+  while True:
+    if not name:
+      print("[X] Name cannot be empty.")
+      continue
+    elif not name.isalpha():
+      print("[X] Name must contain only letters.")
+      continue
+    print(f"[✓] Valid name: {name}")
+    break
+  while True:
+    if not category:
+      print("[X] Category cannot be empty.")
+      continue
+    elif not category.isalpha():
+      print("[X] Name must contain only letters.")
+      continue
+    print(f"[✓] Valid Category: {category}")
+    break
   global finished_id
+  sku =  add_sku(name, category, inventory_raw, semi_finished)
   if name in finished_products:
     print(f"[!] Finished Product '{name}' already exists.")
     return
-  if sku is None:
-       sku = add_sku(name, category, inventory_raw,semi_finished)
   finished_products[name] = {
       'id' : finished_id,
       'category' : category,
@@ -46,8 +63,7 @@ def produce_product(prod_name, quantity):
     print("[X] Invalid price input.")
     return
   category = "Finished Product"
-  sku = None
-  add_finished(prod_name, category, price, quantity, sku)
+  add_finished(prod_name, category, price, quantity)
 
 def view_finished_product():
   if not finished_products:

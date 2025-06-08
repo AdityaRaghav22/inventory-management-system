@@ -31,4 +31,4 @@ def help():
     return render_template('help.html', active_page= 'help')
 
 if __name__ == '__main__':
-  app.run(host = "0.0.0.0", debug=True)
+  # app.run(host = "0.0.0.0", debug=True)
