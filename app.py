@@ -47,6 +47,10 @@ def inventory():
   semi_count = len(semi_finished)
   finished_count = len(finished_products)
   order_count = list(sales_order.items())[-5:]
+
+  raw_total = sum(details["quantity"]for name,details in inventory_raw.items())
+  semi_total = sum(details["quantity"]for name,details in semi_finished.items())
+  finished_total = sum(details["quantity"]for name,details in finished_products.items())
   
   return render_template('products.html',
                          inventory=inventory_raw,
@@ -55,6 +59,9 @@ def inventory():
                          raw_count=raw_count,
                          semi_count=semi_count,
                          finished_count=finished_count,
+                         raw_total=raw_total,
+                         semi_total=semi_total,
+                         finished_total=finished_total,
                          order_count=order_count,
                          active_page='inventory')
   
