@@ -8,9 +8,9 @@
   <div class="col-md-3">
     <div class="card text-white bg-primary shadow-sm h-100">
       <div class="card-body">
-        <h5 class="card-title">Raw Materials</h5>
-        <p class="card-text fs-4">Total Items : {{ raw_count }}</p>
-        <p class="card-text fs-4">Total Amount : {{ raw_total}}</p>
+        <h5 class="card-title fs-3">Raw Materials</h5>
+        <p class="card-text fs-5">Total Items : {{ raw_count }}</p>
+        <p class="card-text fs-5">Total Quantity : {{ raw_total}}</p>
       </div>
     </div>
   </div>
@@ -18,9 +18,9 @@
   <div class="col-md-3">
     <div class="card text-white bg-info shadow-sm h-100">
       <div class="card-body">
-        <h5 class="card-title">Semi-Finished</h5>
-        <p class="card-text fs-4">Total Items : {{ semi_count }}</p>
-        <p class="card-text fs-4">Total Amount : {{ semi_total}}</p>
+        <h5 class="card-title fs-3">Semi-Finished</h5>
+        <p class="card-text fs-5">Total Items : {{ semi_count }}</p>
+        <p class="card-text fs-5">Total Quantity : {{ semi_total}}</p>
       </div>
     </div>
   </div>
@@ -28,9 +28,9 @@
   <div class="col-md-3">
     <div class="card text-white bg-success shadow-sm h-100">
       <div class="card-body">
-        <h5 class="card-title">Finished Products</h5>
-        <p class="card-text fs-4">Total Items : {{ finished_count }}</p>
-        <p class="card-text fs-4">Total Amount : {{ fnished_total}}</p>
+        <h5 class="card-title fs-3">Finished Products</h5>
+        <p class="card-text fs-5">Total Items : {{ finished_count }}</p>
+        <p class="card-text fs-5">Total Quantity : {{ finished_total}}</p>
       </div>
     </div>
   </div>
@@ -38,8 +38,8 @@
   <div class="col-md-3">
     <div class="card text-white bg-warning shadow-sm h-100">
       <div class="card-body">
-        <h5 class="card-title">Sales Orders</h5>
-        <p class="card-text fs-4">{{ order_count | length }}</p>
+        <h5 class="card-title fs-3">Sales Orders</h5>
+        <p class="card-text fs-5">{{ order_count | length }}</p>
       </div>
     </div>
   </div>
@@ -62,10 +62,10 @@
       <input type="text" name="category" class="form-control" placeholder="Category" required>
     </div>
     <div class="col">
-      <input type="number" step="0.01" name="price" class="form-control" placeholder="Price" required>
+      <input type="number" step="0.01" min = 0 name="price" class="form-control" placeholder="Price" required>
     </div>
     <div class="col">
-      <input type="number" step="0.01" name="quantity" class="form-control" placeholder="Quantity" required>
+      <input type="number" step="0.01" min = 0 name="quantity" class="form-control" placeholder="Quantity" required>
     </div>
     <div class="col">
       <button type="submit" class="btn btn-primary">Add Item</button>
