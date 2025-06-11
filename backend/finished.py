@@ -2,6 +2,7 @@
 from backend.bom import BOM
 from backend.raw_materials import inventory_raw
 from backend.semi_finished import semi_finished
+from backend.utils import add_sku
 finished_products = {}
 finished_id = 1
 
@@ -74,25 +75,32 @@ def view_finished_product():
       f"Price: ${details['price']: .2f}, Quantity: {details['quantity']}, SKU: {details['sku']}")
 
 def edit_finished(finished_id, prod_name=None, category=None, price=None, quantity=None, sku=None):
-  for old_name, details in list(finished_products.items()):
+  found = False
+  for finished_name, details in list(finished_products.items()):
     if details['id'] == finished_id:
-      new_name = prod_name.title() if prod_name else old_name
-      if prod_name and prod_name != old_name:
-        finished_products[new_name] = finished_products.pop(old_name)
-        details = finished_products[new_name]
-      if sku is not None:
-        details['sku'] = sku
+      found = True
+      if prod_name is not None and prod_name != finished_name:
+        finished_products[prod_name] = finished_products.pop(finished_name)
+        details = finished_products[prod_name]
       if category is not None:
-        details['category'] = category.title()
+        details['category'] = category
       if quantity is not None:
-        details['quantity'] = round(float(quantity), 2)
+        try:
+          details['quantity'] = round(float(quantity), 2)
+        except (TypeError, ValueError):
+          print(f"[X] Invalid quantity input: {quantity}")
       if price is not None:
-        details['price'] = round(float(price), 2)
+        try:
+          details['price'] = round(float(price), 2)
+        except (TypeError, ValueError):
+          print(f"[X] Invalid price input: {price}")
       print(f"[~] Finished Product {finished_id} Updated.")
+      details['sku'] = add_sku(prod_name, category, inventory_raw, semi_finished)
       view_finished_product()
       return
-  print(f"[X] Finished Product With ID {finished_id} Not Found.")
-
+  if not found:
+    print(f"[X] Finished Product With ID {finished_id} Not Found.")
+  
 def delete_finished(finished_id):
   for name, details in list(finished_products.items()):
     if details['id'] == finished_id:

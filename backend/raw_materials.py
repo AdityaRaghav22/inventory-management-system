@@ -1,6 +1,7 @@
 import random as r
 from backend.utils import add_sku
 
+
 inventory_raw = {}
 raw_id_counter = 1
 
@@ -64,26 +65,33 @@ def delete_raw_name(raw_name):
     print(f"[X] Raw Material with Name {raw_name} NOT FOUND.")
 
 def edit_raw(raw_id, name=None, category=None, price=None, quantity=None, sku=None):
+  from backend.semi_finished import semi_finished
+  found = False
   for raw_name, details in list(inventory_raw.items()):
     if details['id'] == raw_id:
+      found = True
       if name is not None and name != raw_name:
-          inventory_raw[name] = inventory_raw.pop(raw_name)
-          details = inventory_raw[name]
-      if sku is not None:
-          details['sku'] = sku
+        inventory_raw[name] = inventory_raw.pop(raw_name)
+        details = inventory_raw[name]
       if category is not None:
-          details['category'] = category
+        details['category'] = category
       if quantity is not None:
-          details['quantity'] = round(float(quantity),2)
+        try:
+          details['quantity'] = round(float(quantity), 2)
+        except (TypeError, ValueError):
+          print(f"[X] Invalid quantity input: {quantity}")
       if price is not None:
-          details['price'] = round(float(price),2)
-
+        try:
+          details['price'] = round(float(price), 2)
+        except (TypeError, ValueError):
+          print(f"[X] Invalid price input: {price}")
       print(f"[~] Raw Material {raw_id} Updated.")
+      details['sku'] = add_sku(name, category, inventory_raw, semi_finished)
       view_raw()
       return
-
+  if not found:
     print(f"[X] Raw Material With ID {raw_id} Not Found.")
-
+    
 def search_raw(raw_name=None, raw_SKU=None):
   if raw_name is not None:
     if raw_name in inventory_raw:
@@ -101,6 +109,3 @@ def search_raw(raw_name=None, raw_SKU=None):
     return
 
   print("Please provide either raw_name or raw_SKU to search.")
-
-
- 

@@ -87,31 +87,37 @@ def view_semi(prod_name = None):
       print(f"ID: {details['id']}, Name: {name}, Category: {details['category']}, "
             f"Price: ${details['price']:.2f}, Quantity: {details['quantity']}, SKU: {details['sku']}")
 
-def delete_semi(prod_name):
-  prod_name = prod_name.title()
-  if prod_name in semi_finished:
-    del semi_finished[prod_name]
-    print(f"[✓] Semi-Finished Product '{prod_name}' deleted.")
-  else:
-    print(f"[X] Semi-Finished Product '{prod_name}' not found.")
+def delete_semi(semi_id):
+    for prod_name, details in list(semi_finished.items()):
+      if details['id'] == semi_id:
+        del semi_finished[prod_name]
+        print(f"[–] Semi Finished Product '{prod_name}' deleted.")
+        return 
+    print(f"[X] Semi Finished Product with ID {semi_id} not found.")
     
-def edit_semi(semi_id,prod_name=None, category=None, price=None, quantity=None, sku=None):
-  for old_name, details in list(semi_finished.items()):
-    if details['id']==semi_id:
-      new_name= prod_name.title() if prod_name is not None else old_name
-      if prod_name is not None and prod_name!= old_name:
-        semi_finished[new_name]= semi_finished.pop(old_name)
-        details = semi_finished[new_name]
-      if sku is not None: 
-        details['sku']= sku
-      if category is not None: 
-        details['category']= category.title()
-      if quantity is not None: 
-        details['quantity'] = round(float(quantity), 2)
-      if price is not None: 
-        details['price'] = round(float(price), 2)
-      print(f"[~] Semi Finished {semi_id} Updated.")
-      view_semi(new_name if prod_name is not None else old_name)
+def edit_semi(semi_id, name=None, category=None, price=None, quantity=None, sku=None):
+  found = False
+  for semi_name, details in list(semi_finished.items()):
+    if details['id'] == semi_id:
+      found = True
+      if name is not None and name != semi_name:
+        semi_finished[name] = semi_finished.pop(semi_name)
+        details = semi_finished[name]
+      if category is not None:
+        details['category'] = category
+      if quantity is not None:
+        try:
+          details['quantity'] = round(float(quantity), 2)
+        except (TypeError, ValueError):
+          print(f"[X] Invalid quantity input: {quantity}")
+      if price is not None:
+        try:
+          details['price'] = round(float(price), 2)
+        except (TypeError, ValueError):
+          print(f"[X] Invalid price input: {price}")
+      print(f"[~] Semi Finished Product {semi_id} Updated.")
+      details['sku'] = add_sku(name, category, inventory_raw, semi_finished)
+      view_semi()
       return
-  print(f"[X] Semi Finished With ID {semi_id} Not Found.")
-
+  if not found:
+    print(f"[X] Semi Finished Product With ID {semi_id} Not Found.")

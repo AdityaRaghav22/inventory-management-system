@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
-
+from flask import Flask, render_template, request, redirect, url_for,flash
 
 app = Flask(__name__)
 
@@ -22,27 +21,61 @@ def dashboard():
 
 @app.route('/products', methods=['GET', 'POST'])
 def inventory():
-  from backend.raw_materials import inventory_raw, add_raw
-  from backend.semi_finished import semi_finished, add_semi
-  from backend.finished import finished_products, add_finished
+  from backend.raw_materials import inventory_raw, add_raw,edit_raw
+  from backend.semi_finished import semi_finished, add_semi,edit_semi
+  from backend.finished import finished_products, add_finished,edit_finished
   from backend.sales_orders import sales_order 
-  
   if request.method == 'POST':
-      item_type = request.form.get('type')
-      name = request.form['name']
-      category = request.form['category']
-      price = request.form['price']
-      quantity = request.form['quantity']
-  
+    action = request.form.get('action')
+    item_type = request.form.get('type')
+    
+    
+    name = request.form['name'].strip() 
+    category = request.form['category'].strip() 
+    price = request.form['price'] 
+    quantity = request.form['quantity'] 
+
+    if action == 'add':
+        if item_type == 'raw':
+            add_raw(name, category, price, quantity, semi_finished)
+        elif item_type == 'semi':
+            add_semi(name, category, price, quantity)
+        elif item_type == 'finished':
+            add_finished(name, category, price, quantity)
+
+    elif action == 'edit':
+      name = request.form['name'].strip() or None
+      category = request.form['category'].strip() or None
+      price = request.form['price'] or None
+      quantity = request.form['quantity'] or None
+      prod_id_raw = request.form.get('prod_id')
+      if not prod_id_raw or not prod_id_raw.isdigit():
+        return redirect(url_for('inventory'))
+      item_id = int(prod_id_raw)
       if item_type == 'raw':
-          add_raw(name, category, price, quantity, semi_finished)
+        edit_raw(item_id, name, category, price, quantity)
+
       elif item_type == 'semi':
-          add_semi(name, category, price, quantity)
+        edit_semi(item_id, name, category, price, quantity)
       elif item_type == 'finished':
-          add_finished(name, category, price, quantity)
-  
-      return redirect(url_for('inventory'))
-  
+        edit_finished(item_id, name, category, price, quantity)
+
+    elif action == 'delete':
+      prod_id_raw = request.form.get('prod_id')
+      if not prod_id_raw or not prod_id_raw.isdigit():
+        return redirect(url_for('inventory'))
+      item_id = int(prod_id_raw)
+      if item_type == 'raw':
+        from backend.raw_materials import delete_raw_id
+        delete_raw_id(item_id)
+      elif item_type == 'semi':
+        from backend.semi_finished import delete_semi  
+        delete_semi(item_id)
+      elif item_type == 'finished':
+        from backend.finished import delete_finished
+        delete_finished(item_id)
+      
+      
   raw_count = len(inventory_raw)
   semi_count = len(semi_finished)
   finished_count = len(finished_products)
