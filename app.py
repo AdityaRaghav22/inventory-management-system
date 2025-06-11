@@ -97,24 +97,64 @@ def inventory():
                          finished_total=finished_total,
                          order_count=order_count,
                          active_page='inventory')
-  
-  
-@app.route('/bom')
+   
+@app.route('/bom', methods=['GET', 'POST'])
 def bom():
   from backend.raw_materials import inventory_raw
   from backend.semi_finished import semi_finished
   from backend.finished import finished_products
-  from backend.sales_orders import sales_order 
+  from backend.sales_orders import sales_order
+  from backend.bom import (
+    get_all_boms, get_bom,
+    add_bom_component, update_bom_component, delete_bom_component,
+    delete_bom, check_bom_completeness
+)
+
+  message = ""
+  if request.method == "POST":
+    action = request.form.get("action")
+    prod_name = request.form.get("prod_name")
+    component = request.form.get("component")
+    quantity = request.form.get("quantity")
+
+    if action == "add":
+      success, msg = add_bom_component(prod_name, component, quantity)
+    elif action == "update":
+      success, msg = update_bom_component(prod_name, component, quantity)
+    elif action == "delete":
+      success, msg = delete_bom_component(prod_name, component)
+    elif action == "delete_bom":
+      success, msg = delete_bom(prod_name)
+    elif action == "check":
+      _, completeness = check_bom_completeness(prod_name)
+      msg = "Check results below."
+    else:
+      success, msg = False, "[X] Unknown action"
+
+    message = msg
+
+  # Prepare data for frontend
   raw_count = len(inventory_raw)
   semi_count = len(semi_finished)
   finished_count = len(finished_products)
   order_count = list(sales_order.items())[-5:]
-  return render_template('bom.html',
-                         raw_count = raw_count,
-                         semi_count = semi_count,
-                         finished_count = finished_count,
-                         order_count = order_count,
-                         active_page='bom')
+  all_products = list(get_all_boms().keys())
+  all_inventory = list(inventory_raw.keys()) + list(semi_finished.keys())
+
+  selected_prod = request.args.get("prod_name")
+  selected_bom = get_bom(selected_prod) if selected_prod else {}
+
+  return render_template("bom.html",
+                          raw_count=raw_count,
+                          semi_count=semi_count,
+                          finished_count=finished_count,
+                          order_count=order_count,
+                          all_products=all_products,
+                          all_inventory=all_inventory,
+                          selected_prod=selected_prod,
+                          selected_bom=selected_bom,
+                          message=message,
+                          active_page='bom')
 
 @app.route('/sales_order')
 def sales_order():
