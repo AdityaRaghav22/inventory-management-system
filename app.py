@@ -30,7 +30,7 @@ def inventory():
     item_type = request.form.get('type')
     
     
-    name = request.form['name'].strip() 
+    name = request.form['name'].strip().title() 
     category = request.form['category'].strip() 
     price = request.form['price'] 
     quantity = request.form['quantity'] 
@@ -141,10 +141,9 @@ def bom():
       success, msg = False, "[X] Unknown action"
 
     message = msg
-    if action != "check":
+    if action not in ["check", "delete_bom"]:
       selected_bom = get_bom(prod_name)
       selected_product = prod_name.title() if prod_name else ""
-
   boms = get_all_boms()
 
   raw_count = len(inventory_raw)

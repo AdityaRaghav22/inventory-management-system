@@ -1,4 +1,5 @@
 from backend.raw_materials import inventory_raw
+from backend.semi_finished import semi_finished
 
 BOM = {}
 
@@ -46,32 +47,37 @@ def get_all_boms():
 def check_bom_completeness(prod_name):
   prod_name = prod_name.title()
   if prod_name not in BOM:
-      return False, f"[X] BOM for '{prod_name}' not found."
+    return False, f"[X] BOM for '{prod_name}' not found."
   completeness_report = []
   complete = True
-
   for component, qty_needed in BOM[prod_name].items():
     component = component.title()
-    if component not in inventory_raw:
+    available = 0
+    if component in inventory_raw:
+      available += inventory_raw[component]["quantity"]
+    if component in semi_finished:
+      available += semi_finished[component]["quantity"]
+    if available == 0:
       completeness_report.append({
-        "component": component,
-        "status": "❌ Missing",
-        "required": qty_needed,
-        "available": 0
-        })
+          "component": component,
+          "status": "❌ Missing",
+          "required": qty_needed,
+          "available": 0
+      })
       complete = False
     else:
-      available = inventory_raw[component]["quantity"]
       status = "✅ Sufficient" if available >= qty_needed else "❌ Insufficient"
       completeness_report.append({
-        "component": component,
-        "status": status,
-        "required": qty_needed,
-        "available": available
+          "component": component,
+          "status": status,
+          "required": qty_needed,
+          "available": available
       })
       if available < qty_needed:
         complete = False
+
   return complete, completeness_report
+  
 
 def delete_bom(prod_name):
   prod_name = prod_name.title()

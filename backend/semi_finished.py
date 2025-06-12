@@ -1,7 +1,6 @@
 from os import name
 from backend.raw_materials import inventory_raw, add_raw
 from backend.utils import add_sku
-from backend.bom import BOM
 semi_finished = {}
 semi_finish_id = 1
 
@@ -41,6 +40,7 @@ def add_semi (semi_name ,category,price, quantity):
   print(f"[✓] Semi-Finished Product '{name}' Added/Updated Successfully.")
 
 def produce_semi_finished(prod_name, quantity_to_produce):
+  from backend.bom import BOM
   prod_name = prod_name.title()
   if prod_name not in BOM:
     print(f"[X] BOM for '{prod_name}' does not exist.")

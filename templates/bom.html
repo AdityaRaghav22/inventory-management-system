@@ -72,11 +72,10 @@
     <button type="submit" name="action" value="delete_bom" class="btn btn-outline-danger" title="Delete Entire BOM">
       ❌ Delete BOM
     </button>
-    <a href="{{ url_for('bom') }}" class="btn btn-secondary">View BOMs</a>
+    <a href="{{ url_for('bom') }}" class="btn btn-secondary">View all BOMs</a>
   </div>
 </form>
 
-<!-- Display Selected BOM -->
 {% if selected_bom %}
   <h4>📦 BOM for: <strong>{{ selected_product }}</strong></h4>
   <table class="table table-bordered table-striped">
@@ -111,7 +110,7 @@
     </tbody>
   </table>
 
-<!-- Display All BOMs -->
+
 {% elif boms %}
   <h4>📋 All BOMs</h4>
   <div class="row">
