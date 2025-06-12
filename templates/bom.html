@@ -1,114 +1,150 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>BOM Management</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-  <h1>BOM Management</h1>
+{% extends "home.html" %}
+{% block title %}BOM Management{% endblock %}
 
-  {% if message %}
-    <p style="color: green;">{{ message }}</p>
-  {% endif %}
+{% block content %}
+<h2 class="mb-4">🧩 Bill of Materials (BOM)</h2>
 
-  <!-- Select Product to View BOM -->
-  <form method="get" action="/bom">
-    <label>Select Product:</label>
-    <select name="prod_name" required>
-      <option value="">-- Choose Product --</option>
-      {% for prod in all_products %}
-        <option value="{{ prod }}" {% if selected_prod == prod %}selected{% endif %}>{{ prod }}</option>
-      {% endfor %}
-    </select>
-    <button type="submit">View</button>
-  </form>
+<div class="row g-4 mb-4">
+  <div class="col-md-3">
+    <div class="card text-white bg-primary shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title fs-3">Raw Materials</h5>
+        <p class="card-text fs-5">Total Items : {{ raw_count }}</p>
+        <p class="card-text fs-5">Total Quantity : {{ raw_total}}</p>
+      </div>
+    </div>
+  </div>
 
-  {% if selected_prod %}
-    <h2>BOM for: {{ selected_prod }}</h2>
+  <div class="col-md-3">
+    <div class="card text-white bg-info shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title fs-3">Semi-Finished</h5>
+        <p class="card-text fs-5">Total Items : {{ semi_count }}</p>
+        <p class="card-text fs-5">Total Quantity : {{ semi_total}}</p>
+      </div>
+    </div>
+  </div>
 
-    <!-- Display current BOM -->
-    {% if selected_bom %}
-      <table border="1" cellpadding="5">
+  <div class="col-md-3">
+    <div class="card text-white bg-success shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title fs-3">Finished Products</h5>
+        <p class="card-text fs-5">Total Items : {{ finished_count }}</p>
+        <p class="card-text fs-5">Total Quantity : {{ finished_total}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-white bg-warning shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title fs-3">Sales Orders</h5>
+        <p class="card-text fs-5">{{ order_count | length }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOM Form -->
+<form method="POST" action="{{ url_for('bom') }}" class="mb-4 row g-3 align-items-center">
+  <div class="col-md-3">
+    <input type="text" name="prod_name" class="form-control" placeholder="Product Name" required>
+  </div>
+  <div class="col-md-3">
+    <input type="text" name="comp_name" class="form-control" placeholder="Component Name">
+  </div>
+  <div class="col-md-2">
+    <input type="number" name="qty" step="0.01" min="0" class="form-control" placeholder="Quantity">
+  </div>
+  <div class="col-md-4 d-flex gap-2 flex-wrap">
+    <button type="submit" name="action" value="add" class="btn btn-success" title="Add Component">
+      <i class="bi bi-plus-circle"></i>
+    </button>
+    <button type="submit" name="action" value="update" class="btn btn-primary" title="Update Component">
+      <i class="bi bi-pencil"></i>
+    </button>
+    <button type="submit" name="action" value="delete" class="btn btn-danger" title="Delete Component">
+      <i class="bi bi-trash"></i>
+    </button>
+    <button type="submit" name="action" value="check" class="btn btn-warning" title="Check BOM">
+      <i class="bi bi-clipboard-check"></i>
+    </button>
+    <button type="submit" name="action" value="delete_bom" class="btn btn-outline-danger" title="Delete Entire BOM">
+      ❌ Delete BOM
+    </button>
+    <a href="{{ url_for('bom') }}" class="btn btn-secondary">View BOMs</a>
+  </div>
+</form>
+
+<!-- Display Selected BOM -->
+{% if selected_bom %}
+  <h4>📦 BOM for: <strong>{{ selected_product }}</strong></h4>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Required Qty</th>
+        {% if completeness %}
+          <th>Available Qty</th>
+          <th>Status</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% if completeness %}
+        {% for comp in selected_bom %}
         <tr>
-          <th>Component</th>
-          <th>Quantity</th>
+          <td>{{ comp.component }}</td>
+          <td>{{ comp.required }}</td>
+          <td>{{ comp.available }}</td>
+          <td>{{ comp.status }}</td>
         </tr>
+        {% endfor %}
+      {% else %}
         {% for comp, qty in selected_bom.items() %}
         <tr>
           <td>{{ comp }}</td>
           <td>{{ qty }}</td>
         </tr>
         {% endfor %}
-      </table>
-    {% else %}
-      <p>No BOM found.</p>
-    {% endif %}
+      {% endif %}
+    </tbody>
+  </table>
 
-    <hr>
+<!-- Display All BOMs -->
+{% elif boms %}
+  <h4>📋 All BOMs</h4>
+  <div class="row">
+    {% for product, components in boms.items() %}
+    <div class="col-3 mb-4">
+      <div class="card mt-3 shadow-sm border-1  rounded-3 bg-white h-100">
+        <div class="card-header  fw-bold">
+          📦 {{ product }}
+        </div>
+        <div class="card-body ">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Required Qty</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for comp, qty in components.items() %}
+              <tr>
+                <td>{{ comp }}</td>
+                <td>{{ qty }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="text-muted">No BOMs available.</p>
+{% endif %}
 
-    <!-- Add Component -->
-    <h3>Add Component</h3>
-    <form method="post">
-      <input type="hidden" name="action" value="add">
-      <input type="hidden" name="prod_name" value="{{ selected_prod }}">
-      <label>Component:</label>
-      <select name="component" required>
-        <option value="">-- Select --</option>
-        {% for comp in all_inventory %}
-          <option value="{{ comp }}">{{ comp }}</option>
-        {% endfor %}
-      </select>
-      <label>Quantity:</label>
-      <input type="number" step="0.01" name="quantity" required>
-      <button type="submit">Add</button>
-    </form>
-
-    <!-- Update Component -->
-    <h3>Update Component Quantity</h3>
-    <form method="post">
-      <input type="hidden" name="action" value="update">
-      <input type="hidden" name="prod_name" value="{{ selected_prod }}">
-      <label>Component:</label>
-      <select name="component" required>
-        {% for comp in selected_bom.keys() %}
-          <option value="{{ comp }}">{{ comp }}</option>
-        {% endfor %}
-      </select>
-      <label>New Quantity:</label>
-      <input type="number" step="0.01" name="quantity" required>
-      <button type="submit">Update</button>
-    </form>
-
-    <!-- Delete Component -->
-    <h3>Delete Component</h3>
-    <form method="post">
-      <input type="hidden" name="action" value="delete">
-      <input type="hidden" name="prod_name" value="{{ selected_prod }}">
-      <label>Component:</label>
-      <select name="component" required>
-        {% for comp in selected_bom.keys() %}
-          <option value="{{ comp }}">{{ comp }}</option>
-        {% endfor %}
-      </select>
-      <button type="submit" style="color: red;">Delete</button>
-    </form>
-
-    <!-- Delete Full BOM -->
-    <h3>Delete Entire BOM</h3>
-    <form method="post" onsubmit="return confirm('Are you sure you want to delete the entire BOM?')">
-      <input type="hidden" name="action" value="delete_bom">
-      <input type="hidden" name="prod_name" value="{{ selected_prod }}">
-      <button type="submit" style="color: red;">Delete BOM</button>
-    </form>
-
-    <!-- Check BOM Completeness -->
-    <h3>Check BOM Completeness</h3>
-    <form method="post">
-      <input type="hidden" name="action" value="check">
-      <input type="hidden" name="prod_name" value="{{ selected_prod }}">
-      <button type="submit">Check Completeness</button>
-    </form>
-  {% endif %}
-</body>
-</html>
+{% endblock %}

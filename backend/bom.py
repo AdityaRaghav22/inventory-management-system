@@ -3,6 +3,8 @@ from backend.raw_materials import inventory_raw
 BOM = {}
 
 def add_bom_component(prod_name, comp_name, qty):
+  if not prod_name or not comp_name or qty is None:
+    return False, "[X] Missing required fields"
   prod_name = prod_name.title()
   comp_name = comp_name.title()
   try:
