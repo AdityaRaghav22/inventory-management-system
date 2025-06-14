@@ -8,24 +8,13 @@ finished_id = 1
 
 def add_finished (name, category, price, quantity):
   from backend.utils import add_sku
-  while True:
-    if not name:
-      print("[X] Name cannot be empty.")
-      continue
-    elif not name.isalpha():
-      print("[X] Name must contain only letters.")
-      continue
-    print(f"[✓] Valid name: {name}")
-    break
-  while True:
-    if not category:
-      print("[X] Category cannot be empty.")
-      continue
-    elif not category.isalpha():
-      print("[X] Name must contain only letters.")
-      continue
-    print(f"[✓] Valid Category: {category}")
-    break
+  name = name.title()
+  category = category.title()
+  if name in finished_products:
+    finished_products[name]["quantity"] += round(float(quantity), 2)
+    finished_products[name]["price"] += round(float(price), 2)
+    print(f"[~] Updated existing Finished Product: {name}")
+    return
   global finished_id
   sku =  add_sku(name, category, inventory_raw, semi_finished)
   if name in finished_products:
@@ -41,30 +30,35 @@ def add_finished (name, category, price, quantity):
   finished_id += 1
   print(f"[+]Finished Product Added: {name}")
   
-def produce_product(prod_name, quantity):
+def produce_product(prod_name, quantity, price_per_unit):
   prod_name = prod_name.title()
+  quantity = round(float(quantity), 2)
   if prod_name not in BOM:
-      print(f"[X] BOM for '{prod_name}' not found.")
-      return
+    print(f"[X] BOM for '{prod_name}' not found.")
+    return False, f"BOM for '{prod_name}' not found."
   for component, qty_needed in BOM[prod_name].items():
-      total_needed = qty_needed * quantity
-      if component not in inventory_raw:
-          print(f"[X] Component '{component}' missing from inventory.")
-          return
-      elif inventory_raw[component]["quantity"] < total_needed:
-          print(f"[X] Not enough '{component}'. Needed: {total_needed}, Available: {inventory_raw[component]['quantity']}")
-          return
+    total_needed = qty_needed * quantity
+    component = component.title()
+    raw_qty = inventory_raw.get(component, {}).get("quantity", 0)
+    semi_qty = semi_finished.get(component, {}).get("quantity", 0)
+    total_available = raw_qty + semi_qty
+    if total_available < total_needed:
+      return False, f"[X] Not enough '{component}'. Needed: {total_needed}, Available: {total_available}"
   for component, qty_needed in BOM[prod_name].items():
-      inventory_raw[component]["quantity"] -= qty_needed * quantity
-      print(f"[~] Used {qty_needed * quantity} of '{component}'.")
-  print(f"[✓] Produced {quantity} unit(s) of '{prod_name}'.")
-  try:
-    price = float(input(f"Enter a price for {prod_name}:")) * quantity
-  except ValueError:
-    print("[X] Invalid price input.")
-    return
+    total_needed = qty_needed * quantity
+    component = component.title()
+    if component in inventory_raw and inventory_raw[component]["quantity"] >= total_needed:
+      inventory_raw[component]["quantity"] -= total_needed
+    elif component in semi_finished and semi_finished[component]["quantity"] >= total_needed:
+      semi_finished[component]["quantity"] -= total_needed
+    else:
+      print(f"[X] Not enough '{component}'.")        
+    print(f"[~] Used {total_needed} of '{component}'.")
   category = "Finished Product"
-  add_finished(prod_name, category, price, quantity)
+  total_price = float(price_per_unit) * quantity
+  add_finished(prod_name, category, total_price, quantity)
+  return True, f"[✓] Produced {quantity} unit(s) of '{prod_name}'."
+  
 
 def view_finished_product():
   if not finished_products:

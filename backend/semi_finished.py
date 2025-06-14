@@ -6,25 +6,13 @@ semi_finish_id = 1
 
 def add_semi (semi_name ,category,price, quantity):
   global semi_finish_id
-  while True:
-    if not semi_name:
-      print("[X] Name cannot be empty.")
-      continue
-    elif not semi_name.isalpha():
-      print("[X] Name must contain only letters.")
-      continue
-    print(f"[✓] Valid name: {semi_name}")
-    break
-  while True:
-    if not category:
-      print("[X] Category cannot be empty.")
-      continue
-    elif not category.isalpha():
-      print("[X] Name must contain only letters.")
-      continue
-    print(f"[✓] Valid Category: {category}")
-    break
-
+  name = semi_name.title()
+  category = category.title()
+  if name in semi_finished:
+    semi_finished[name]["quantity"] += round(float(quantity), 2)
+    semi_finished[name]["price"] += round(float(price), 2)
+    print(f"[~] Updated existing Finished Product: {name}")
+    return
   sku = add_sku(semi_name, category, inventory_raw, semi_finished)
   if name in semi_finished:
     print(f"[!] Semi-Finished Product '{name}' already exists.")
@@ -39,7 +27,7 @@ def add_semi (semi_name ,category,price, quantity):
   semi_finish_id += 1
   print(f"[✓] Semi-Finished Product '{name}' Added/Updated Successfully.")
 
-def produce_semi_finished(prod_name, quantity_to_produce):
+def produce_semi_finished(prod_name, quantity_to_produce,unit_price):
   from backend.bom import BOM
   prod_name = prod_name.title()
   if prod_name not in BOM:
@@ -57,16 +45,12 @@ def produce_semi_finished(prod_name, quantity_to_produce):
     total_required = qty_needed * quantity_to_produce
     inventory_raw[component]['quantity'] -= total_required
     print(f"[-] Used {total_required} of '{component}'.")
-  try:
-    unit_price = float(input(f"Enter a price for '{prod_name}': "))
-  except ValueError:
-    print("[X] Invalid price input.")
-    return
-  price = unit_price * quantity_to_produce
+  
+  total_price = unit_price * quantity_to_produce
   category = "Semi-Finished"
   
-  add_raw(prod_name, category, price, quantity_to_produce,semi_finished)
-  add_semi(prod_name, category, price, quantity_to_produce)
+  add_raw(prod_name, category,total_price, quantity_to_produce,semi_finished)
+  add_semi(prod_name, category, total_price, quantity_to_produce)
   print(f"[✓] Produced {quantity_to_produce} unit(s) of semi-finished product '{prod_name}'.")
 
 def view_semi(prod_name = None):
