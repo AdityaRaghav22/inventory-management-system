@@ -43,6 +43,11 @@ Mobile/PWA support
 📊 Basic Reports & Inventory Insights (exportable)
 
 📌 Getting Started
+
+Just visit this url :- https://inventory-management-system-fffl.onrender.com
+
+or
+
 Clone the repo
 
 Install dependencies: pip install -r requirements.txt
