@@ -15,7 +15,7 @@ A powerful, modular inventory management system built with Python and Flask, des
 
 🚨 BOM Validation and Inventory Check before production
 
-🏗️ Tech Stack
+#🏗️ Tech Stack
 Backend: Python, Flask
 
 Frontend: HTML, CSS, JavaScript, Jinja2
@@ -24,12 +24,12 @@ Data Handling: Python Dictionaries (modular file-based backend for now)
 
 (Planned: SQLite/MySQL integration for scalable storage)
 
-📁 Folder Structure 
+#📁 Folder Structure <br> 
 /backend         → Business logic and inventory modules  
 /templates       → Jinja2 HTML pages  
 app.py           → Flask application entry point 
 
-🚀 Upcoming Features
+#🚀 Upcoming Features
 Supplier and Sales Order Management
 
 Multi-location Inventory Tracking
@@ -40,9 +40,9 @@ Forecasting & Advanced Analytics
 
 Mobile/PWA support
 
-📊 Basic Reports & Inventory Insights (exportable)
+Basic Reports & Inventory Insights (exportable)
 
-📌 Getting Started
+#📌 Getting Started
 
 Just visit this url :- https://inventory-management-system-fffl.onrender.com
 
