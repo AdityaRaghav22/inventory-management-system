@@ -24,7 +24,7 @@ Data Handling: Python Dictionaries (modular file-based backend for now)
 
 (Planned: SQLite/MySQL integration for scalable storage)
 
-📁 Folder Structure
+📁 Folder Structure 
 /backend         → Business logic and inventory modules  
 /templates       → Jinja2 HTML pages  
 app.py           → Flask application entry point 
