@@ -7,7 +7,7 @@ A powerful, modular inventory management system built with Python and Flask, des
 <img src="images/dashboard.png" alt="Dashboard View" width="600"/>
 
 <h2>📦 Inventory View</h2>
-<img src="images/inventory.png" alt="Inventory View" width="600"/>
+<img src="images/Inventory.png" alt="Inventory View" width="600"/>
 
 <h2>🧾 BOM View</h2>
 <img src="images/bom.png" alt="BOM View" width="600"/>
