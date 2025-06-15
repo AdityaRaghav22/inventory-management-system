@@ -80,3 +80,13 @@ Install dependencies: pip install -r requirements.txt
 Run the app: python app.py
 
 Access at: http://127.0.0.1:5000/
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.  
+Feel free to use, modify, and distribute it for personal or commercial purposes.  
+
+See the [LICENSE](LICENSE) file for full license text.
+
