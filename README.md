@@ -1,8 +1,22 @@
 # inventory-management-system
 
 A powerful, modular inventory management system built with Python and Flask, designed to streamline stock tracking, manage raw materials, semi-finished and finished goods, and enable efficient production workflows. Ideal for small to medium-scale manufacturers and distributors.
+---
 
-🔧 Features
+<h2>📊 Dashboard View</h2>
+<img src="images/dashboard.png" alt="Dashboard View" width="600"/>
+
+<h2>📦 Inventory View</h2>
+<img src="images/inventory.png" alt="Inventory View" width="600"/>
+
+<h2>🧾 BOM View</h2>
+<img src="images/bom.png" alt="BOM View" width="600"/>
+
+<h2>🏭 Production View</h2>
+<img src="images/production.png" alt="Production View" width="600"/>
+
+## 🔧 Features
+
 ✅ User-Friendly Dashboard with real-time inventory summaries
 
 📁 Raw Material, Semi-Finished, and Finished Product Management
@@ -15,7 +29,10 @@ A powerful, modular inventory management system built with Python and Flask, des
 
 🚨 BOM Validation and Inventory Check before production
 
-#🏗️ Tech Stack
+---
+
+## 🏗️ Tech Stack
+
 Backend: Python, Flask
 
 Frontend: HTML, CSS, JavaScript, Jinja2
@@ -24,12 +41,18 @@ Data Handling: Python Dictionaries (modular file-based backend for now)
 
 (Planned: SQLite/MySQL integration for scalable storage)
 
-#📁 Folder Structure <br> 
+---
+
+## 📁 Folder Structure
+
+
 /backend         → Business logic and inventory modules  
 /templates       → Jinja2 HTML pages  
 app.py           → Flask application entry point 
 
-#🚀 Upcoming Features
+---
+
+## 🚀 Upcoming Features
 Supplier and Sales Order Management
 
 Multi-location Inventory Tracking
@@ -42,7 +65,9 @@ Mobile/PWA support
 
 Basic Reports & Inventory Insights (exportable)
 
-#📌 Getting Started
+---
+
+## 📌 Getting Started
 
 Just visit this url :- https://inventory-management-system-fffl.onrender.com
 
