@@ -49,7 +49,6 @@ def produce_semi_finished(prod_name, quantity_to_produce,unit_price):
   total_price = unit_price * quantity_to_produce
   category = "Semi-Finished"
   
-  add_raw(prod_name, category,total_price, quantity_to_produce,semi_finished)
   add_semi(prod_name, category, total_price, quantity_to_produce)
   print(f"[✓] Produced {quantity_to_produce} unit(s) of semi-finished product '{prod_name}'.")
 
